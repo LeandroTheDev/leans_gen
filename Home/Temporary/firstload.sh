@@ -20,6 +20,12 @@ if command -v steam > /dev/null 2>&1; then
     ln -s /home/$username/.steam/ /home/$username/System/Places/Steam
 fi
 
+# Create public folder
+mkdir -p /home/$username/Public
+sudo chmod 0777 -R /home/$username/Public
+sudo mkdir -p /Public/$username
+ln -s /home/$username/Public/ /Public/$username
+
 # This script will auto delete after executing
 rm -rf $HOME/Temporaryfirstload.sh # Deleting the script
 sed -i '\#$HOME/Temporaryfirstload.sh#d' "$HOME/.bashrc" # Removing from .bashrc if exist

@@ -321,7 +321,7 @@ if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
     pacman -S vscode dotnet-sdk dotnet-runtime chromium rustup openssh --noconfirm
     su $username -c "rustup default stable" # Rust installation
     su $username -c "/home/$username/Temporary/flutter-install.sh" # Flutter installation
-else    
+else
     rm -rf "/home/$username/Temporary/flutter-install.sh"
     rm -rf "/etc/skel/Temporary/flutter-install.sh"
 fi

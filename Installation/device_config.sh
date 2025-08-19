@@ -307,10 +307,10 @@ response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
 if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
     pacman -S firefox steam-native-runtime discord kwrite obs-studio gwenview gimp mangohud goverlay gamemode ark unzip zip unrar p7zip flameshot plasma-systemmonitor --noconfirm
     chmod +x "/home/$username/System/Scripts/gooddies.sh"
-    su $username -c "/home/$username/System/Scripts/gooddies.sh"
+    su $username -c "/home/$username/Temporary/gooddies.sh"
 else
-    rm -rf "/home/$username/System/Scripts/goodies.sh"
-    rm -rf "/etc/skel/System/Scripts/goodies.sh"
+    rm -rf "/home/$username/Temporary/goodies.sh"
+    rm -rf "/etc/skel/Temporary/goodies.sh"
 fi
 
 # Leans Development

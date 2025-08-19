@@ -4,15 +4,14 @@ Ultra simple arch linux installation with KDE
 ### How to use (online installation version)
 - Download the [arch linux iso](https://archlinux.org/download/)
 - Create the flash usb my recommendation is using [Ventoy](https://www.ventoy.net/en/download.html)
-- After boot in the arch linux use the command ``sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/leansgen/leansgen.sh)"``
-- > ``sh -c "$(curl -sS -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/leansgen/leansgen.sh)"`` force remove cache
+- After boot in the arch linux use the command ``sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/main/leansgen.sh)"``
+- > ``sh -c "$(curl -sS -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/main/leansgen.sh)"`` force remove cache
 
 ### How to use (offline installation mode)
 - To do
 
 ### Tecnical Informations
-- Inside the installation the script will ask you what disks you want to auto mount on system boot up
-- > LeansGEN does not support install on pre existing disks, LeansGEN will erase all data from the selected disk
+- LeansGEN does not support install on pre existing disks, LeansGEN will erase all data from the selected disk
 - UEFI and Legacy is supported
 - Desktop Environment: KDE Plasma 6, desktop version (The cleaneast without Bloatwares)
 - Sound driver: Pipewire

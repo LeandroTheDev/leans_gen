@@ -293,7 +293,7 @@ echo "Do you want to install LeansGEN generic arch user recommended programs? (F
 read -p "Do you want to accept? (Y/n): " response
 response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
 if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-    pacman -S firefox steam-native-runtime kwrite obs-studio gwenview gimp mangohud goverlay gamemode ark unzip zip unrar p7zip flameshot plasma-systemmonitor --noconfirm
+    pacman -S firefox steam kwrite obs-studio gwenview gimp mangohud goverlay gamemode ark unzip zip unrar p7zip flameshot plasma-systemmonitor --noconfirm
     chmod +x "/home/$username/System/Scripts/gooddies.sh"
     su $username -c "/home/$username/Temporary/gooddies.sh"
 else

@@ -182,24 +182,24 @@ sed -i '/^\[multilib\]/ {n; s/^#Include = \/etc\/pacman.d\/mirrorlist/Include = 
 
 ### REGION: Personal OS for LeansGEN
 # Installing the OS
-pacman -Sy plasma-desktop konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm --noconfirm
+read -p "Do you want to install the KDE graphical interface? [Y/n] " answer
+if [[ -z "$answer" || "$answer" =~ ^[Yy]$ ]]; then
+    pacman -Sy plasma-desktop konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm --noconfirm
 
-# Installing the Wiki
-cd /home/$username/Desktop
-git clone https://github.com/LeandroTheDev/leans_gen.wiki.git
-mv leans_gen.wiki "Leans Gen Wiki"
-cd "Leans Gen Wiki"
-echo -e "[Desktop Entry]\nIcon=bookmark-add-symbolic" > .directory
+    # Installing the Wiki
+    cd /home/$username/Desktop
+    git clone https://github.com/LeandroTheDev/leans_gen.wiki.git
+    mv leans_gen.wiki "Leans Gen Wiki"
+    cd "Leans Gen Wiki"
+    echo -e "[Desktop Entry]\nIcon=bookmark-add-symbolic" > .directory
 
-clear
-
-# Auto logging in KDE
-echo "Do you wish to automatically login $username in TTY1 and automatically open the KDE and lock the session? (More faster but doesn't accept multiple users)"
-read -p "Do you want to accept? (y/N): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ "$response" == "y" || "$response" == "yes" ]]; then
-    mkdir /etc/systemd/system/getty@tty1.service.d
-    cat > "/etc/systemd/system/getty@tty1.service.d/autologin.conf" <<EOF
+    # Auto logging in KDE
+    echo "Do you wish to automatically login $username in TTY1 and automatically open the KDE and lock the session? (More faster but doesn't accept multiple users)"
+    read -p "Do you want to accept? (y/N): " response
+    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+    if [[ "$response" == "y" || "$response" == "yes" ]]; then
+        mkdir /etc/systemd/system/getty@tty1.service.d
+        cat > "/etc/systemd/system/getty@tty1.service.d/autologin.conf" <<EOF
 [Service]
 ExecStart=
 ExecStart=-/sbin/agetty -o '-p -f -- \\\\u' --noclear --autologin $username %I \$TERM
@@ -222,16 +222,19 @@ Name=lockscreen.sh
 Type=Application
 X-KDE-AutostartScript=true
 EOF
-else
-    # SDDM Version
-    echo "Do you wish to use a login manager instead? (SDDM), (If you don't accept this option you will not have a graphical interface)"
-    read -p "Do you want to accept? (Y/n): " response
-    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-        pacman -S sddm --noconfirm
-        systemctl enable sddm
+    else
+        # SDDM Version
+        echo "Do you wish to use a login manager instead? (SDDM), (If you don't accept this option you will not have a graphical interface)"
+        read -p "Do you want to accept? (Y/n): " response
+        response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+        if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
+            pacman -S sddm --noconfirm
+            systemctl enable sddm
+        fi
     fi
 fi
+
+clear
 ### ENDREGION
 
 clear

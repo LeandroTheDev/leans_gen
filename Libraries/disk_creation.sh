@@ -10,15 +10,39 @@ fi
 # Necessary dependencie
 pacman -Sy lsof --noconfirm
 
-#  Checking if is mounted somewhere
-if mount | grep -q "/dev/$disk"; then
-    echo "Disk $disk is currently mounted and in use, try using: umount -R $disk"
-    exit 1
-# Checking if is currently in use    
-elif lsof | grep -q $disk; then
-    echo "Disk $disk is being used by some processes."
-    exit 1
+# Check if any partition of the disk is mounted
+if lsblk "$disk" | grep -q "/"; then
+    echo "One or more partitions on $disk are currently mounted."
+    echo ""
+
+    read -p "Do you want to unmount all partitions on this disk? (y/N): " confirm
+
+    # Default is NO
+    if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+        echo "Unmounting partitions on $disk..."
+        umount -R "$disk" 2>/dev/null
+
+        # If umount fails, try unmounting one by one
+        if lsblk "$disk" | grep -q "/"; then
+            echo "Force unmounting partitions individually..."
+            for part in $(lsblk -ln -o NAME "$disk" | tail -n +2); do
+                umount -R "/dev/$part" 2>/dev/null
+            done
+        fi
+
+        # Check again
+        if lsblk "$disk" | grep -q "/"; then
+            echo "Failed to unmount all partitions. Aborting."
+            exit 1
+        fi
+
+        echo "All partitions unmounted successfully."
+    else
+        echo "Operation cancelled. Disk is still mounted."
+        exit 1
+    fi
 fi
+
 
 # Installation Confirmation
 clear

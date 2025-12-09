@@ -144,7 +144,6 @@ if [ -d /sys/firmware/efi ]; then
 
     grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=LeansGen --recheck
     grub-mkconfig -o /boot/grub/grub.cfg
-fi
 else
     echo "Legacy (BIOS), Creating one single signature for Linux partition"
     pacman -S grub dosfstools os-prober mtools ntfs-3g --noconfirm

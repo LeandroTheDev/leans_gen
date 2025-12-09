@@ -1,11 +1,8 @@
 #!/bin/bash
-clear
 if [ -z "$INSTALLPARTITION" ]; then
     echo "You need to set the INSTALLPARTITION variable, try: export INSTALLPARTITION=/dev/sd? before running this script"
     exit 1
 fi
-
-clear
 
 ### REGION: Timezone set
 while true; do

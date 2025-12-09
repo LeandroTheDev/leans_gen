@@ -33,21 +33,21 @@ read -p "Enter your choice: " option
 
 case "$option" in
     1)
-        arch-chroot /mnt bash -c 'export INSTALLPARTITION="$disk" && sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/main/Installation/full.sh)"'
+        arch-chroot /mnt env INSTALLPARTITION="$disk" bash -c 'sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/main/Installation/full.sh)"'
         if [ $? -ne 0 ]; then
             echo "The device installation has failed."
             exit 1
         fi
         ;;
     2)
-        arch-chroot /mnt bash -c 'export INSTALLPARTITION="$disk" && sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/main/Installation/server.sh)"'
+        arch-chroot /mnt env INSTALLPARTITION="$disk" bash -c 'sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/main/Installation/server.sh)"'
         if [ $? -ne 0 ]; then
             echo "The device installation has failed."
             exit 1
         fi
         ;;
     3)
-        arch-chroot /mnt bash -c 'export INSTALLPARTITION="$disk" && sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/main/Installation/empty.sh)"'
+        arch-chroot /mnt env INSTALLPARTITION="$disk" bash -c 'sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/main/Installation/empty.sh)"'
         if [ $? -ne 0 ]; then
             echo "The device installation has failed."
             exit 1

@@ -17,10 +17,18 @@ cd ..
 # cd package
 # makepkg -sic --noconfirm
 
+auracle clone vesktop
+cd vesktop
+makepkg -sic --noconfirm
+
+auracle clone flutter
+cd flutter
+makepkg -sic --noconfirm
+
 # Deleting temporary folder
 rm -rf "/home/$username/Temp"
 
 # Deleting the script
-rm -rf "/home/$username/System/Scripts/goodies.sh"
+rm -rf "/home/$username/Temporary/goodies.sh"
 
 clear

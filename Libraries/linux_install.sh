@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 clear
 
 if ! mount | grep -q 'on /mnt '; then

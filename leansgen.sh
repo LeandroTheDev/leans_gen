@@ -1,56 +1,61 @@
-#!/bin/bash
+#!/bin/sh
 echo "Leans Gen V-0.5"
 echo "Welcome to Leans Gen, in the next steps you will install a fresh arch linux in your device, please proceed with caution, this installer requires constant internet connection."
-read -p "Press any key to continue"
+read -p "Press enter to continue"
+
+./Libraries/wifi_connect.sh
+
+read -p "Press enter to continue"
 
 clear # Clear previously messages
 lsblk # Show devices available
+
 # Ask the user to input the disk
 echo "Type the disk you want it to install, ex: /dev/sda or /dev/nvme0n1"
 read -p "/dev/" disk
 disk="/dev/$disk"
 
-# Checking if the user input exist
-if [ ! -e "$disk" ]; then
-    echo "$disk does not exist"
-    exit 1
-fi
+./Libraries/disk_creation.sh $disk
 
-# Necessary dependencie
-pacman -Sy lsof --noconfirm
+./Libraries/linux_install.sh $disk
 
-#  Checking if is mounted somewhere
-if mount | grep -q "/dev/$disk"; then
-    echo "Disk $disk is currently mounted and in use, try using: umount -R $disk"
-    exit 1
-# Checking if is currently in use    
-elif lsof | grep -q $disk; then
-    echo "Disk $disk is being used by some processes."
-    exit 1
-fi
+clear
 
-export INSTALLPARTITION=$disk
+echo "Select installation type:"
+echo "[1] Full Desktop"
+echo "[2] Server"
+echo "[3] Empty"
+echo ""
 
-# Device partitioning
-sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/arch_linux/refs/heads/leansgen/Installation/disk_creation.sh)"
-if [ $? -ne 0 ]; then
-    echo "The disk creation script has failed."
-    exit 1
-fi
+read -p "Enter your choice: " option
 
-# Installing Linux
-sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/arch_linux/refs/heads/leansgen/Installation/linux_install.sh)"
-if [ $? -ne 0 ]; then
-    echo "The Linux installation has failed."
-    exit 1
-fi
-
-# Configuring device and boot
-arch-chroot /mnt bash -c 'export INSTALLPARTITION="$INSTALLPARTITION" && sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/arch_linux/refs/heads/leansgen/Installation/device_config.sh)"'
-if [ $? -ne 0 ]; then
-    echo "The device installation has failed."
-    exit 1
-fi
+case "$option" in
+    1)
+        arch-chroot /mnt bash -c 'export INSTALLPARTITION="$disk" && sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/arch_linux/refs/heads/leansgen/Installation/full.sh)"'
+        if [ $? -ne 0 ]; then
+            echo "The device installation has failed."
+            exit 1
+        fi
+        ;;
+    2)
+        arch-chroot /mnt bash -c 'export INSTALLPARTITION="$disk" && sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/arch_linux/refs/heads/leansgen/Installation/server.sh)"'
+        if [ $? -ne 0 ]; then
+            echo "The device installation has failed."
+            exit 1
+        fi
+        ;;
+    3)
+        arch-chroot /mnt bash -c 'export INSTALLPARTITION="$disk" && sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/arch_linux/refs/heads/leansgen/Installation/empty.sh)"'
+        if [ $? -ne 0 ]; then
+            echo "The device installation has failed."
+            exit 1
+        fi
+        ;;
+    *)
+        echo "Invalid option."
+        exit 1
+        ;;
+esac
 
 clear
 

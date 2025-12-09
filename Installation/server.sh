@@ -46,17 +46,6 @@ while true; do
 done
 ### ENDREGION
 
-### REGION: Personal OS for LeansGEN
-echo "Downloading system template..."
-pacman -S git --noconfirm
-cd /tmp
-git clone --branch leansgen --single-branch https://github.com/LeandroTheDev/leans_gen.git
-cp -r /tmp/leans_gen/Home/{.,}* /etc/skel
-chmod 755 -R /etc/skel
-rm -rf /tmp/leans_gen
-chmod +x /etc/skel/Temporary/firstload.sh
-### ENDREGION
-
 clear
 while true; do
     echo "System Language"
@@ -81,7 +70,7 @@ locale-gen
 
 clear
 
-read -p "Device name: " deviceName
+read -p "Server name: " deviceName
 echo "$deviceName" | tee /etc/hostname > /dev/null
 cat <<EOF > /etc/hosts
 127.0.0.1   localhost
@@ -180,60 +169,6 @@ systemctl enable NetworkManager
 sed -i 's/^#\[\(multilib\)\]/[\1]/' /etc/pacman.conf
 sed -i '/^\[multilib\]/ {n; s/^#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
 
-### REGION: Personal OS for LeansGEN
-# Installing the OS
-pacman -Sy plasma-desktop konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm --noconfirm
-
-# Installing the Wiki
-cd /home/$username/Desktop
-git clone https://github.com/LeandroTheDev/leans_gen.wiki.git
-mv leans_gen.wiki "Leans Gen Wiki"
-cd "Leans Gen Wiki"
-echo -e "[Desktop Entry]\nIcon=bookmark-add-symbolic" > .directory
-
-clear
-
-# Auto logging in KDE
-echo "Do you wish to automatically login $username in TTY1 and automatically open the KDE and lock the session? (More faster but doesn't accept multiple users)"
-read -p "Do you want to accept? (y/N): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ "$response" == "y" || "$response" == "yes" ]]; then
-    mkdir /etc/systemd/system/getty@tty1.service.d
-    cat > "/etc/systemd/system/getty@tty1.service.d/autologin.conf" <<EOF
-[Service]
-ExecStart=
-ExecStart=-/sbin/agetty -o '-p -f -- \\\\u' --noclear --autologin $username %I \$TERM
-EOF
-    echo -e '\n# Start kde when logging in tty1\nif [[ $(tty) == /dev/tty1 ]]; then\n    startplasma-wayland\nfi' >> /home/$username/.bashrc
-    mkdir -p "/home/$username/System/Scripts"
-    LOCKSCREEN_SCRIPT="/home/$username/System/Scripts/lockscreen.sh"
-    cat > $LOCKSCREEN_SCRIPT <<EOF
-#!/bin/sh
-loginctl lock-session
-EOF
-    chmod +x "$LOCKSCREEN_SCRIPT"
-    mkdir -p "/home/$username/.config/autostart/"
-    LOCKSCREEN_DESKTOP="/home/$username/.config/autostart/lockscreen.sh.desktop"
-    cat > $LOCKSCREEN_DESKTOP <<EOF
-[Desktop Entry]
-Exec=/home/$username/System/Scripts/lockscreen.sh
-Icon=application-x-shellscript
-Name=lockscreen.sh
-Type=Application
-X-KDE-AutostartScript=true
-EOF
-else
-    # SDDM Version
-    echo "Do you wish to use a login manager instead? (SDDM), (If you don't accept this option you will not have a graphical interface)"
-    read -p "Do you want to accept? (Y/n): " response
-    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-        pacman -S sddm --noconfirm
-        systemctl enable sddm
-    fi
-fi
-### ENDREGION
-
 clear
 
 # System Drivers
@@ -299,66 +234,6 @@ while true; do
     esac
 done
 
-### REGION: Personal OS for LeansGEN
-# Leans Applications
-echo "Do you want to install LeansGEN generic arch user recommended programs? (Firefox, Steam, Discord, OBS Studio, Kwrite Gwenview, GIMP, Auracle, Mangohud, Goverlay, Gamemode, Flameshot, Ark and Compress Tools, Plasma System Monitor)"
-read -p "Do you want to accept? (Y/n): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-    pacman -S firefox steam-native-runtime discord kwrite obs-studio gwenview gimp mangohud goverlay gamemode ark unzip zip unrar p7zip flameshot plasma-systemmonitor --noconfirm
-    chmod +x "/home/$username/System/Scripts/gooddies.sh"
-    su $username -c "/home/$username/Temporary/gooddies.sh"
-else
-    rm -rf "/home/$username/Temporary/goodies.sh"
-    rm -rf "/etc/skel/Temporary/goodies.sh"
-fi
-
-# Leans Development
-echo "Do you want to install LeansGEN general development tools? (Flutter, .NET, Rust, VSCode, OpenSSH, Chromium and configuration variables?)"
-read -p "Do you want to accept? (Y/n): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-    pacman -S vscode dotnet-sdk dotnet-runtime chromium rustup openssh --noconfirm
-    su $username -c "rustup default stable" # Rust installation
-    su $username -c "/home/$username/Temporary/flutter-install.sh" # Flutter installation
-else
-    rm -rf "/home/$username/Temporary/flutter-install.sh"
-    rm -rf "/etc/skel/Temporary/flutter-install.sh"
-fi
-
-# Bluetooth
-echo "Install Bluetooth Drivers?"
-read -p "Do you want to accept? (Y/n): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-    pacman -S bluez bluez-utils --noconfirm
-    systemctl enable bluetooth
-    su $username -c "/home/$username/System/Scripts/xbox-bluetooth-drivers.sh"
-else
-    rm -rf "/home/$username/System/Scripts/xbox-bluetooth-drivers.sh"
-    rm -rf "/etc/skel/System/Scripts/xbox-bluetooth-drivers.sh"
-fi
-
-### ENDREGION
-
-# After all goodies installation, lets copy the root template
-cp -r /etc/skel/.root/. /
-
-# Numlock on boot
-chmod +x /usr/local/bin/numlock
-systemctl enable numlock
-
-echo "Do you wish to auto mount any external device on starting the system?"
-read -p "Do you want to accept? (Y/n): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-    chmod +x "/home/$username/Temporary/generate-mount.sh"
-    su $username -c "/home/$username/Temporary/generate-mount.sh"
-else
-    rm -rf "/home/$username/Temporary/generate-mount.sh"
-    rm -rf "/etc/skel/Temporary/generate-mount.sh"
-fi
-
 # Swap memory creation
 while true; do
     echo "How much GB do you want for swap memory?"
@@ -373,17 +248,6 @@ done
 mkswap -U clear --size ${swap_size_gb}G --file /swapfile
 swapon /swapfile
 echo '/swapfile none swap defaults 0 0' | tee -a /etc/fstab
-
-# Windows dual boot
-echo "Do you wish to enable windows finding in grub?"
-read -p "Do you want to accept? (Y/n): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-    sed -i 's/^#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
-fi
-
-# Prevent wrong permissions after installation
-chown -R "$username:$username" "/home/$username"
 
 update-grub
 

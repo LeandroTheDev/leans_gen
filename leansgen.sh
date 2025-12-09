@@ -19,12 +19,14 @@ disk="/dev/$disk"
 
 ./Libraries/linux_install.sh $disk
 
+read -p "Arch Linux is Fully installed, press enter to continue: " option
+
 clear
 
-echo "Select installation type:"
-echo "[1] Full Desktop"
-echo "[2] Server"
-echo "[3] Empty"
+echo "Select OS installation type:"
+echo "[1] Full Desktop (KDE and Optional Goodies)"
+echo "[2] Server (No IDE and Goodies)"
+echo "[3] Empty (Boot Loader Only)"
 echo ""
 
 read -p "Enter your choice: " option

@@ -11,7 +11,7 @@ fi
 pacman -Sy lsof --noconfirm
 
 # Check if any partition of the disk is mounted
-if lsblk "$disk" | grep -q "/"; then
+if lsblk -n -o MOUNTPOINT "$disk" | grep -q "/"; then
     echo "One or more partitions on $disk are currently mounted."
     echo ""
 
@@ -30,7 +30,16 @@ if lsblk "$disk" | grep -q "/"; then
             done
         fi
 
-        # Check again
+        # If everthing goes wrong try to umount the mountpoint
+        if lsblk "$disk" | grep -q "/"; then
+            MOUNTPOINTS=$(lsblk -n -o MOUNTPOINT "$disk" | grep "/")
+            for mp in $MOUNTPOINTS; do
+                echo "Unmounting $mp"
+                umount -R "$mp" 2>/dev/null
+            done
+        fi
+
+        # Final check
         if lsblk "$disk" | grep -q "/"; then
             echo "Failed to unmount all partitions. Aborting."
             exit 1

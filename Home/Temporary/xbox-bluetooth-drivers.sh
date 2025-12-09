@@ -3,7 +3,7 @@ echo "Installing Xbox Bluetooth Controller Drivers..."
 username=$(whoami)
 cd "/home/$username"
 
-mkdir Temp
+mkdir -p Temp
 cd Temp
 git clone https://aur.archlinux.org/xpadneo-dkms-git.git
 cd xpadneo-dkms-git

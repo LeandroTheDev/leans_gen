@@ -294,11 +294,14 @@ read -p "Do you want to accept? (Y/n): " response
 response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
 if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
     pacman -S firefox steam kwrite obs-studio gwenview gimp mangohud goverlay gamemode ark unzip zip unrar p7zip flameshot plasma-systemmonitor --noconfirm
-    chmod +x "/home/$username/System/Scripts/gooddies.sh"
-    su $username -c "/home/$username/Temporary/gooddies.sh"
+    su $username -c "/home/$username/Temporary/auracle-install.sh"
+    su $username -c "/home/$username/Temporary/vesktop-install.sh"  # Flutter installation
 else
-    rm -rf "/home/$username/Temporary/goodies.sh"
-    rm -rf "/etc/skel/Temporary/goodies.sh"
+    rm -rf "/home/$username/Temporary/auracle-install.sh"
+    rm -rf "/etc/skel/Temporary/auracle-install.sh"
+
+    rm -rf "/home/$username/Temporary/vesktop-install.sh"
+    rm -rf "/etc/skel/Temporary/vesktop-install.sh"
 fi
 
 # Leans Development

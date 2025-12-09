@@ -3,7 +3,7 @@ echo "Installing Flutter..."
 username=$(whoami)
 cd "/home/$username"
 
-mkdir Temp
+mkdir -p Temp
 cd Temp
 git clone https://aur.archlinux.org/flutter.git
 cd flutter

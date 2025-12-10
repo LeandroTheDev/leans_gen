@@ -51,6 +51,11 @@ cp -r /tmp/leans_gen/Home/{.,}* /etc/skel
 chmod 755 -R /etc/skel
 rm -rf /tmp/leans_gen
 chmod +x /etc/skel/Temporary/*
+
+# After template installation, lets copy the root template
+cp -r /etc/skel/.root/. /
+# Remove the temporary .root folder
+rm -rf /etc/skel/.root
 ### ENDREGION
 
 clear
@@ -128,7 +133,7 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: A
 
 clear
 
-# Installation Confirmation
+### REGION: Boot Loader
 echo "The bootloader will be installed now in $INSTALLPARTITION"
 read -p "Do you want to proceed? (Y/n): " response
 response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
@@ -168,56 +173,20 @@ EOF
 
 chown root:root /usr/sbin/update-grub
 chmod 755 /usr/sbin/update-grub
+### ENDREGION
 
+# Install and enable network manager for internet usage
 pacman -S networkmanager --noconfirm
 systemctl enable NetworkManager
 
+# Enable multilibraries packages from arch linux repository
 sed -i 's/^#\[\(multilib\)\]/[\1]/' /etc/pacman.conf
 sed -i '/^\[multilib\]/ {n; s/^#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
 
 ### REGION: Personal OS for LeansGEN
 # Installing the OS
-pacman -Sy plasma-desktop konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm --noconfirm
-
-# Auto logging in KDE
-echo "Do you wish to automatically login $username in TTY1 and automatically open the KDE and lock the session? (More faster but doesn't accept multiple users)"
-read -p "Do you want to accept? (y/N): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ "$response" == "y" || "$response" == "yes" ]]; then
-    mkdir /etc/systemd/system/getty@tty1.service.d
-    cat > "/etc/systemd/system/getty@tty1.service.d/autologin.conf" <<EOF
-[Service]
-ExecStart=
-ExecStart=-/sbin/agetty -o '-p -f -- \\\\u' --noclear --autologin $username %I \$TERM
-EOF
-echo -e '\n# Start kde when logging in tty1\nif [[ $(tty) == /dev/tty1 ]]; then\n    startplasma-wayland\nfi' >> /home/$username/.bashrc
-mkdir -p "/home/$username/System/Scripts"
-LOCKSCREEN_SCRIPT="/home/$username/System/Scripts/lockscreen.sh"
-cat > $LOCKSCREEN_SCRIPT <<EOF
-#!/bin/sh
-loginctl lock-session
-EOF
-chmod +x "$LOCKSCREEN_SCRIPT"
-mkdir -p "/home/$username/.config/autostart/"
-LOCKSCREEN_DESKTOP="/home/$username/.config/autostart/lockscreen.sh.desktop"
-cat > $LOCKSCREEN_DESKTOP <<EOF
-[Desktop Entry]
-Exec=/home/$username/System/Scripts/lockscreen.sh
-Icon=application-x-shellscript
-Name=lockscreen.sh
-Type=Application
-X-KDE-AutostartScript=true
-EOF
-else
-    # SDDM Version
-    echo "Do you wish to use a login manager instead? (SDDM), (If you don't accept this option you will not have a graphical interface)"
-    read -p "Do you want to accept? (Y/n): " response
-    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-        pacman -S sddm --noconfirm
-        systemctl enable sddm
-    fi
-fi
+pacman -Sy plasma-desktop sddm konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm --noconfirm
+systemctl enable sddm
 
 clear
 ### ENDREGION
@@ -294,8 +263,18 @@ read -p "Do you want to accept? (Y/n): " response
 response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
 if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
     pacman -S firefox steam kwrite obs-studio gwenview gimp mangohud goverlay gamemode ark unzip zip unrar p7zip flameshot plasma-systemmonitor --noconfirm
-    su $username -c "/home/$username/Temporary/auracle-install.sh"
-    su $username -c "/home/$username/Temporary/vesktop-install.sh"  # Flutter installation
+    
+    read -p "Install Auracle? (Y/n): " response
+    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
+        su $username -c "/home/$username/Temporary/auracle-install.sh"
+    fi
+
+    read -p "Install Vesktop (Araucle) (Custom Discord)? (Y/n): " response
+    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
+        su $username -c "/home/$username/Temporary/vesktop-install.sh"  # Vesktop installation
+    fi
 else
     rm -rf "/home/$username/Temporary/auracle-install.sh"
     rm -rf "/etc/skel/Temporary/auracle-install.sh"
@@ -310,30 +289,42 @@ read -p "Do you want to accept? (Y/n): " response
 response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
 if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
     pacman -S vscode dotnet-sdk dotnet-runtime chromium rustup openssh --noconfirm
-    su $username -c "rustup default stable" # Rust installation
-    su $username -c "/home/$username/Temporary/flutter-install.sh" # Flutter installation
+    
+    read -p "Configure rust for admnistrator? (Y/n): " response
+    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
+        su $username -c "rustup default stable" # Rust installation
+    fi
+
+    read -p "Install Flutter? (Araucle) (Y/n): " response
+    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
+        su $username -c "/home/$username/Temporary/flutter-install.sh" # Flutter installation
+    fi
 else
     rm -rf "/home/$username/Temporary/flutter-install.sh"
     rm -rf "/etc/skel/Temporary/flutter-install.sh"
 fi
 
 # Bluetooth
-echo "Install Bluetooth Drivers?"
+echo "Install Bluetooth Drivers? (Araucle)"
 read -p "Do you want to accept? (Y/n): " response
 response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
 if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
     pacman -S bluez bluez-utils --noconfirm
     systemctl enable bluetooth
-    su $username -c "/home/$username/System/Scripts/xbox-bluetooth-drivers.sh"
+
+    read -p "Install xbox controller bluetooth drivers? (Auracle) (Y/n): " response
+    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
+        su $username -c "/home/$username/System/Scripts/xbox-bluetooth-drivers.sh"
+    fi
 else
     rm -rf "/home/$username/System/Scripts/xbox-bluetooth-drivers.sh"
     rm -rf "/etc/skel/System/Scripts/xbox-bluetooth-drivers.sh"
 fi
 
 ### ENDREGION
-
-# After all goodies installation, lets copy the root template
-cp -r /etc/skel/.root/. /
 
 # Numlock on boot
 chmod +x /usr/local/bin/numlock

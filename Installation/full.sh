@@ -180,7 +180,7 @@ sed -i '/^\[multilib\]/ {n; s/^#Include = \/etc\/pacman.d\/mirrorlist/Include = 
 
 ### REGION: Personal OS for LeansGEN
 # Installing the OS
-pacman -Sy plasma-desktop sddm konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm --noconfirm
+pacman -Sy plasma-desktop sddm konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm
 systemctl enable sddm
 
 clear
@@ -252,72 +252,53 @@ while true; do
 done
 
 ### REGION: Personal OS for LeansGEN
-# Leans Applications
-echo "Do you want to install LeansGEN generic arch user recommended programs? (Firefox, Steam, OBS Studio, Kwrite Gwenview, GIMP, Auracle, Mangohud, Goverlay, Gamemode, Flameshot, Ark and Compress Tools, Plasma System Monitor)"
-read -p "Do you want to accept? (Y/n): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-    pacman -S firefox steam kwrite obs-studio gwenview gimp mangohud goverlay gamemode ark unzip zip unrar p7zip flameshot plasma-systemmonitor --noconfirm
+while true; do
+    echo "LeansGEN Goddies"
+    echo "1 - Basic Desktop (Waterfox, Kwrite Gwenview, GIMP, Paru, Flameshot, Ark and Compress Tools, Plasma System Monitor, VLC)"
+    echo "2 - Social (Vesktop - Custom Discord)"
+    echo "3 - Streaming (OBS Studio)"
+    echo "4 - Gaming (Steam, Mangohud, Goverlay, Gamemode)"
+    echo "5 - Development (Flutter, .NET, Rust, VSCode, OpenSSH, Chromium, DBeaver)"
+    echo "6 - Bluetooth Drivers"
+    echo "7 - Exit"
+    read -p "Select an option: " choice
     
-    read -p "Install Auracle? (Y/n): " response
-    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-        su $username -c "/home/$username/Temporary/auracle-install.sh"
-    fi
+    case $choice in
+        1)
+            pacman -S kwrite gwenview gimp ark unzip zip unrar p7zip flameshot plasma-systemmonitor vlc
 
-    read -p "Install Vesktop (Araucle) (Custom Discord)? (Y/n): " response
-    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-        su $username -c "/home/$username/Temporary/vesktop-install.sh"  # Vesktop installation
-    fi
-else
-    rm -rf "/home/$username/Temporary/auracle-install.sh"
-    rm -rf "/etc/skel/Temporary/auracle-install.sh"
+            su $username -c "/home/$username/Temporary/paru-install.sh"
+            su $username -c "/home/$username/Temporary/waterfox-install.sh"
+            ;;
+        2)
+            su $username -c "/home/$username/Temporary/vesktop-install.sh"
+            ;;
+        3)
+            su $username -c "/home/$username/Temporary/obs-install.sh"
+            ;;
+        4)
+            pacman -S steam mangohud goverlay gamemode
+            ;;
+        5)
+            pacman -S vscode dotnet-sdk dotnet-runtime chromium rustup openssh dbeaver
+            su $username -c "rustup default stable"
+            su $username -c "/home/$username/Temporary/flutter-install.sh"
+            ;;
+        6)
+            pacman -S bluez bluez-utils
+            systemctl enable bluetooth
 
-    rm -rf "/home/$username/Temporary/vesktop-install.sh"
-    rm -rf "/etc/skel/Temporary/vesktop-install.sh"
-fi
-
-# Leans Development
-echo "Do you want to install LeansGEN general development tools? (Flutter, .NET, Rust, VSCode, OpenSSH, Chromium and configuration variables?)"
-read -p "Do you want to accept? (Y/n): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-    pacman -S vscode dotnet-sdk dotnet-runtime chromium rustup openssh --noconfirm
-    
-    read -p "Configure rust for admnistrator? (Y/n): " response
-    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-        su $username -c "rustup default stable" # Rust installation
-    fi
-
-    read -p "Install Flutter? (Araucle) (Y/n): " response
-    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-        su $username -c "/home/$username/Temporary/flutter-install.sh" # Flutter installation
-    fi
-else
-    rm -rf "/home/$username/Temporary/flutter-install.sh"
-    rm -rf "/etc/skel/Temporary/flutter-install.sh"
-fi
-
-# Bluetooth
-echo "Install Bluetooth Drivers? (Araucle)"
-read -p "Do you want to accept? (Y/n): " response
-response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-    pacman -S bluez bluez-utils --noconfirm
-    systemctl enable bluetooth
-
-    read -p "Install xbox controller bluetooth drivers? (Auracle) (Y/n): " response
-    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
-        su $username -c "/home/$username/System/Scripts/xbox-bluetooth-drivers.sh"
-    fi
-else
-    rm -rf "/home/$username/System/Scripts/xbox-bluetooth-drivers.sh"
-    rm -rf "/etc/skel/System/Scripts/xbox-bluetooth-drivers.sh"
-fi
+            su $username -c "/home/$username/Temporary/xbox-bluetooth-drivers.sh"
+            ;;
+        7)
+            echo "Exiting..."
+            break
+            ;;
+        *)
+            echo "Invalid option. Please select a valid option."
+            ;;
+    esac
+done
 
 ### ENDREGION
 

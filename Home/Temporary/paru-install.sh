@@ -5,8 +5,8 @@ cd "/home/$username"
 
 mkdir -p Temp
 cd Temp
-git clone https://aur.archlinux.org/paru.git
-cd paru
+git clone https://aur.archlinux.org/paru-bin.git
+cd paru-bin
 makepkg -sic --noconfirm
 
 # Deleting temporary folder

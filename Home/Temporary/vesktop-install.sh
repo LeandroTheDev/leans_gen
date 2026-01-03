@@ -5,8 +5,8 @@ cd "/home/$username"
 
 mkdir -p Temp
 cd Temp
-git clone https://aur.archlinux.org/vesktop.git
-cd vesktop
+git clone https://aur.archlinux.org/vesktop-bin.git
+cd vesktop-bin
 makepkg -sic --noconfirm
 
 # Deleting temporary folder

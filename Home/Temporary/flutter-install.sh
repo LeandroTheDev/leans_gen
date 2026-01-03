@@ -5,8 +5,8 @@ cd "/home/$username"
 
 mkdir -p Temp
 cd Temp
-git clone https://aur.archlinux.org/flutter.git
-cd flutter
+git clone https://aur.archlinux.org/flutter-bin.git
+cd flutter-bin
 makepkg -sic --noconfirm
 
 # Deleting temporary folder

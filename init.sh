@@ -6,4 +6,4 @@ pacman -Sy git
 git clone https://github.com/LeandroTheDev/leans_gen
 cd ./leans_gen
 chmod +x -R ./
-leansgen.sh
+./leansgen.sh

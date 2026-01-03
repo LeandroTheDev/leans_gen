@@ -15,9 +15,78 @@ echo "Type the disk you want it to install, ex: /dev/sda or /dev/nvme0n1"
 read -p "/dev/" disk
 disk="/dev/$disk"
 
-./Libraries/disk_creation.sh $disk
+while true; do
+    echo "Select installation type:"
+    echo "1) Manual disk creation"
+    echo "2) Auto installation (Full Disk Wipe)"
+    read -p "Enter your choice [1 or 2]: " choice
 
-./Libraries/linux_install.sh $disk
+    case $choice in
+        1)
+            if [ -d /sys/firmware/efi ]; then
+                echo "You are on UEFI mode, 1 UEFI (300MB) partition and 1 Linux (Full) partition is required for installation"
+                read -p "Press enter to continue"
+
+                cfdisk $disk # Manual partitioning
+                clear # Clear previously messages
+                lsblk # Show devices available
+
+                while true; do
+                    read -p "Enter UEFI partition: /dev/" uefi_disk
+                    uefi_disk="/dev/$uefi_disk"
+                    read -p "Enter Linux partition: /dev/" linux_disk
+                    linux_disk="/dev/$linux_disk"
+
+                    if [ -n "$uefi_disk" ] && [ -n "$linux_disk" ]; then
+                        break
+                    else
+                        echo "Both partitions must be specified. Please try again."
+                    fi
+
+                    mkfs.fat -F32 $uefi_disk
+                    mkfs.ext4 $linux_disk
+
+                    mkdir -p /mnt
+                    mount $linux_disk /mnt
+                    mkdir -p /mnt/boot/EFI
+                    mount $uefi_disk /mnt/boot/EFI
+                done
+            else
+                echo "You are on Legacy BIOS mode, 1 linux partition is required for installation"
+                read -p "Press enter to continue"
+
+                cfdisk $disk # Manual partitioning
+                clear # Clear previously messages
+                lsblk # Show devices available
+
+                while true; do
+                    read -p "Enter Linux partition: /dev/" linux_disk
+                    linux_disk="/dev/$linux_disk"
+
+                    if [ -n "$linux_disk" ]; then
+                        break
+                    else
+                        echo "Partition must be specified. Please try again."
+                    fi
+
+                    mkdir -p /mnt
+                    mkfs.ext4 $linux_disk
+                    mount $linux_disk /mnt
+                done
+            fi
+            break
+            ;;
+        2)
+            ./Libraries/disk_creation.sh $disk
+            break
+            ;;
+        *)
+            echo "Invalid choice. Please enter 1 or 2."
+            ;;
+    esac
+done
+
+./Libraries/linux_install.sh
 
 read -p "Arch Linux is Fully installed, press enter to continue: " option
 
@@ -25,7 +94,7 @@ clear
 
 echo "Select OS installation type:"
 echo "[1] Full Desktop (KDE and Optional Goodies)"
-echo "[2] Server (No IDE and Goodies)"
+echo "[2] Server (No IDE and No Goodies)"
 echo "[3] Empty (Boot Loader Only)"
 echo ""
 

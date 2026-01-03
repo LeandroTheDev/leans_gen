@@ -1,6 +1,12 @@
 #!/bin/bash
-if [ -z "$INSTALLPARTITION" ]; then
-    echo "You need to set the INSTALLPARTITION variable, try: export INSTALLPARTITION=/dev/sd? before running this script"
+if [ ! -d /sys/firmware/efi ]; then
+    if [ -z "$INSTALLPARTITION" ]; then
+        echo "You need to set the INSTALLPARTITION variable for Legacy BIOS."
+        echo "Try: export INSTALLPARTITION=/dev/sdX before running this script"
+        exit 1
+    fi
+elif ! mountpoint -q /boot/EFI; then
+    echo "You need to mount the EFI partition for UEFI BIOS."
     exit 1
 fi
 
@@ -130,17 +136,6 @@ fi
 if [ -d /sys/firmware/efi ]; then
     echo "UEFI Detected, Installing UEFI boot loader"
     pacman -S grub efibootmgr dosfstools os-prober mtools ntfs-3g --noconfirm
-    mkdir /boot/EFI
-
-    # Boot patition mounting
-    if [[ $INSTALLPARTITION == /dev/nvme* ]]; then
-        mount "${INSTALLPARTITION}p1" /boot/EFI
-    elif [[ $INSTALLPARTITION == /dev/sd* ]]; then
-        mount "${INSTALLPARTITION}1" /boot/EFI
-    else
-        echo "Cannot proceed the boot installation the device is unkown, only supports nvme and sata/ssd disk"
-        exit 1
-    fi
 
     grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=LeansGen --recheck
     grub-mkconfig -o /boot/grub/grub.cfg

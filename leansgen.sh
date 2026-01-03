@@ -38,18 +38,17 @@ while true; do
                     linux_disk="/dev/$linux_disk"
 
                     if [ -n "$uefi_disk" ] && [ -n "$linux_disk" ]; then
+                        mkfs.fat -F32 $uefi_disk
+                        mkfs.ext4 $linux_disk
+
+                        mkdir -p /mnt
+                        mount $linux_disk /mnt
+                        mkdir -p /mnt/boot/EFI
+                        mount $uefi_disk /mnt/boot/EFI
                         break
                     else
                         echo "Both partitions must be specified. Please try again."
                     fi
-
-                    mkfs.fat -F32 $uefi_disk
-                    mkfs.ext4 $linux_disk
-
-                    mkdir -p /mnt
-                    mount $linux_disk /mnt
-                    mkdir -p /mnt/boot/EFI
-                    mount $uefi_disk /mnt/boot/EFI
                 done
             else
                 echo "You are on Legacy BIOS mode, 1 linux partition is required for installation"
@@ -64,14 +63,14 @@ while true; do
                     linux_disk="/dev/$linux_disk"
 
                     if [ -n "$linux_disk" ]; then
+                        mkfs.ext4 $linux_disk
+
+                        mkdir -p /mnt
+                        mount $linux_disk /mnt
                         break
                     else
                         echo "Partition must be specified. Please try again."
                     fi
-
-                    mkdir -p /mnt
-                    mkfs.ext4 $linux_disk
-                    mount $linux_disk /mnt
                 done
             fi
             break

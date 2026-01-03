@@ -13,7 +13,7 @@ makepkg -sic --noconfirm
 rm -rf "/home/$username/Temp"
 
 # Deleting the script
-rm -rf "/home/$username/Temporary/auracle-install.sh"
-sudo rm -rf "/etc/skel/Temporary/auracle-install.sh"
+#rm -rf "/home/$username/Temporary/auracle-install.sh"
+#sudo rm -rf "/etc/skel/Temporary/auracle-install.sh"
 
 clear

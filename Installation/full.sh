@@ -234,7 +234,7 @@ while true; do
             ;;
         4)
             # Instal virtual box dependencies
-            pacman -S virtualbox-guest-utils --noconfirm
+            pacman -S vulkan-virtio lib32-vulkan-virtio virtualbox-guest-utils --noconfirm
             systemctl enable vboxservice.service
 
             # Add user to the virtual machine group

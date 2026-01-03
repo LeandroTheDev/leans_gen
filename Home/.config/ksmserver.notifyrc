@@ -1,7 +1,0 @@
-[Event/locked]
-Action=None|Sound
-Sound=file:///home/{USERNAME}/System/Decoration/Sounds/locked.oga
-
-[Event/unlocked]
-Action=None|Sound
-Sound=file:///home/{USERNAME}/System/Decoration/Sounds/login.oga

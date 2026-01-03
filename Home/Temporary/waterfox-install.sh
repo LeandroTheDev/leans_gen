@@ -13,7 +13,7 @@ makepkg -sic --noconfirm
 rm -rf "/home/$username/Temp"
 
 # Deleting the script
-rm -rf "/home/$username/Temporary/waterfox-install.sh"
-sudo rm -rf "/etc/skel/Temporary/waterfox-install.sh"
+#rm -rf "/home/$username/Temporary/waterfox-install.sh"
+#sudo rm -rf "/etc/skel/Temporary/waterfox-install.sh"
 
 clear

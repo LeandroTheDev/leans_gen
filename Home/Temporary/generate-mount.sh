@@ -66,4 +66,4 @@ done
 
 # Deleting the script
 rm -rf "/home/$username/Temporary/generate-mount.sh"
-sudo rm -rf "/etc/skel/Temporary/generate-mount.sh"
+#sudo rm -rf "/etc/skel/Temporary/generate-mount.sh"

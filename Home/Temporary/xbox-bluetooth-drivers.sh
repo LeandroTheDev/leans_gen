@@ -13,7 +13,7 @@ makepkg -sic --noconfirm
 rm -rf "/home/$username/Temp"
 
 # Deleting the script
-rm -rf "/home/$username/Temporary/xbox-bluetooth-drivers.sh"
-sudo rm -rf "/etc/skel/Temporary/xbox-bluetooth-drivers.sh"
+#rm -rf "/home/$username/Temporary/xbox-bluetooth-drivers.sh"
+#sudo rm -rf "/etc/skel/Temporary/xbox-bluetooth-drivers.sh"
 
 clear

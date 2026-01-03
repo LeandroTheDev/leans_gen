@@ -4,11 +4,6 @@ username=$(whoami)
 # Enable sound services
 systemctl --user enable wireplumber.service pipewire.service pipewire-pulse.service
 
-# Plasma Configurations
-sed -i "s/{USERNAME}/$username/g" "/home/$username/.config/plasma-org.kde.plasma.desktop-appletsrc"
-sed -i "s/{USERNAME}/$username/g" "/home/$username/.config/bluedevil.notifyrc"
-sed -i "s/{USERNAME}/$username/g" "/home/$username/.config/kscreenlockerrc"
-
 # Places folder creation
 ln -s /home/$username/.config /home/$username/System/Places/Config
 ln -s /home/$username/.local/share /home/$username/System/Places/Share
@@ -27,8 +22,8 @@ sudo mkdir -p /Public/$username
 ln -s /home/$username/Public/ /Public/$username
 
 # This script will auto delete after executing
-rm -rf $HOME/Temporary/firstload.sh # Deleting the script
-sed -i '\#$HOME/Temporary/firstload.sh#d' "$HOME/.bashrc" # Removing from .bashrc if exist
+rm -rf $HOME/Temporary/first-load.sh # Deleting the script
+sed -i '\#$HOME/Temporary/first-load.sh#d' "$HOME/.bashrc" # Removing from .bashrc if exist
 
 # Remove temporary folder
 rm -rf /home/$username/Temporary

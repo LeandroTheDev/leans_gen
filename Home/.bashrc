@@ -18,4 +18,4 @@ fi
 
 # Variables
 
-$HOME/Temporary/firstload.sh
+$HOME/Temporary/first-load.sh

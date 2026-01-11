@@ -5,7 +5,15 @@ Ultra simple arch linux installation with KDE
 - Download the [arch linux iso](https://archlinux.org/download/)
 - Create the flash usb my recommendation is using [Ventoy](https://www.ventoy.net/en/download.html)
 - After boot connect to internet if you are not already connected [Arch Linux Wiki - IWD](https://wiki.archlinux.org/title/Iwd)
+
+### Option 1
 - After boot in the arch linux use the command ``sh -c "$(curl -sS https://raw.githubusercontent.com/LeandroTheDev/leans_gen/refs/heads/main/init.sh)"``
+
+### Option 2
+- Download git: ``pacman -Sy git``
+- Clone repository ``git clone https://github.com/LeandroTheDev/leans_gen``
+- Enter in the repository ``cd ./leans_gen``
+- Execute the script ``./leansgen.sh``
 
 ### How to use (offline installation mode)
 - To do

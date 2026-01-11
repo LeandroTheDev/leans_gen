@@ -159,6 +159,7 @@ systemctl enable NetworkManager
 
 sed -i 's/^#\[\(multilib\)\]/[\1]/' /etc/pacman.conf
 sed -i '/^\[multilib\]/ {n; s/^#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
+pacman -Sy
 
 clear
 

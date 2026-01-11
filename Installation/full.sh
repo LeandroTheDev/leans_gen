@@ -177,10 +177,13 @@ systemctl enable NetworkManager
 # Enable multilibraries packages from arch linux repository
 sed -i 's/^#\[\(multilib\)\]/[\1]/' /etc/pacman.conf
 sed -i '/^\[multilib\]/ {n; s/^#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
+pacman -Sy
+
+clear
 
 ### REGION: Personal OS for LeansGEN
 # Installing the OS
-pacman -Sy plasma-desktop sddm konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm
+pacman -S plasma-desktop sddm konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm
 systemctl enable sddm
 
 clear

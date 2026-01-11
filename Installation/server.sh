@@ -135,12 +135,14 @@ fi
 
 if [ -d /sys/firmware/efi ]; then
     echo "UEFI Detected, Installing UEFI boot loader"
+    read -p "Press enter to continue"
     pacman -S grub efibootmgr dosfstools os-prober mtools ntfs-3g --noconfirm
 
     grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=LeansGen --recheck
     grub-mkconfig -o /boot/grub/grub.cfg
 else
     echo "Legacy (BIOS), Creating one single signature for Linux partition"
+    read -p "Press enter to continue"
     pacman -S grub dosfstools os-prober mtools ntfs-3g --noconfirm
     grub-install "${INSTALLPARTITION}"
 fi

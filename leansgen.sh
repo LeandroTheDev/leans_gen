@@ -6,8 +6,6 @@ read -p "Press enter to continue"
 # Usseless to download the scripts you are already connected to the internet dummy
 #./Libraries/wifi_connect.sh
 
-read -p "Press enter to continue"
-
 clear # Clear previously messages
 lsblk # Show devices available
 

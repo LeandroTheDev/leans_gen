@@ -75,7 +75,7 @@ dd if=/dev/zero of=$disk bs=1M count=1000 status=progress
 if [ -d /sys/firmware/efi ]; then
     echo "UEFI Detected, Creating 2 partitions EFI and Linux"
     fdisk "$disk" <<EOF
-o
+g
 n
 
 
@@ -91,7 +91,7 @@ EOF
 else
     echo "Legacy (BIOS), Creating one single Linux partition"
     fdisk "$disk" <<EOF
-g
+o
 n
 
 

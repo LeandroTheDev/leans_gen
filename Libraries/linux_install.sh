@@ -17,5 +17,6 @@ fi
 
 # Installation Process
 pacstrap /mnt base-devel base linux linux-firmware vim
+
 # Generating fstab for the Linux System
 genfstab -U /mnt >> /mnt/etc/fstab

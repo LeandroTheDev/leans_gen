@@ -127,10 +127,14 @@ if [ -d /sys/firmware/efi ]; then
         mkfs.fat -F32 "${disk}p1"
         mkfs.ext4 "${disk}p2"
         mount "${disk}p2" /mnt
+        mkdir -p /mnt/boot/EFI
+        mount "${disk}p1" /mnt/boot/EFI
     elif [[ $disk == /dev/sd* ]]; then
         mkfs.fat -F32 "${disk}1"
         mkfs.ext4 "${disk}2"
         mount "${disk}2" /mnt
+        mkdir -p /mnt/boot/EFI
+        mount "${disk}1" /mnt/boot/EFI
     else
         echo "Cannot proceed the signature the device is unkown, only supports nvme and sata/ssd disk"
         exit 1

@@ -3,6 +3,9 @@ echo "Leans Gen V-0.6"
 echo "Welcome to Leans Gen, in the next steps you will install a fresh arch linux in your device, please proceed with caution, this installer requires constant internet connection."
 read -p "Press enter to continue"
 
+timedatectl set-ntp true
+pacman -Sy archlinux-keyring --noconfirm
+
 # Usseless to download the scripts you are already connected to the internet dummy
 #./Libraries/wifi_connect.sh
 

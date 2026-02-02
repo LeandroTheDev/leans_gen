@@ -197,6 +197,7 @@ while true; do
     echo "1 - Intel"
     echo "2 - AMD"
     echo "3 - Virtual Machine"
+    echo "4 - Exit"
     read -p "Select an option: " choice
 
     case $choice in
@@ -211,6 +212,9 @@ while true; do
         3)
             break
             ;;
+        4)
+            break
+            ;;
         *)
             echo "Invalid option. Please select a valid option."
             ;;
@@ -220,7 +224,7 @@ while true; do
     echo "Graphics Drivers, if you have Hybrid GPUs consider installing for both"
     echo "1 - Intel"
     echo "2 - Nvidia"
-    echo "3 - Amd"
+    echo "3 - AMD"
     echo "4 - Virtual Machine"
     echo "5 - Exit"
     read -p "Select an option: " choice
@@ -237,7 +241,7 @@ while true; do
             ;;
         4)
             # Instal virtual box dependencies
-            pacman -S vulkan-virtio lib32-vulkan-virtio virtualbox-guest-utils --noconfirm
+            pacman -S virtualbox-guest-utils --noconfirm
             systemctl enable vboxservice.service
 
             # Add user to the virtual machine group
@@ -322,18 +326,30 @@ fi
 
 # Swap memory creation
 while true; do
-    echo "How much GB do you want for swap memory?"
+    echo "How much GB do you want for swap memory? (0 = no swap)"
     read swap_size_gb
-    
-    if [[ "$swap_size_gb" =~ ^[0-9]+$ ]] && [ "$swap_size_gb" -gt 0 ]; then
-        break
-    else
-        echo "Invalid number for swap memory. Please enter a positive number."
-    fi
+
+    case "$swap_size_gb" in
+        ''|*[!0-9]*)
+            echo "Please enter a valid non-negative number."
+            ;;
+        *)
+            break
+            ;;
+    esac
 done
-mkswap -U clear --size ${swap_size_gb}G --file /swapfile
-swapon /swapfile
-echo '/swapfile none swap defaults 0 0' | tee -a /etc/fstab
+
+if [ "$swap_size_gb" -eq 0 ]; then
+    echo "Skipping swap creation."
+else
+    echo "Creating ${swap_size_gb}G swap file..."
+
+    fallocate -l ${swap_size_gb}G /swapfile || dd if=/dev/zero of=/swapfile bs=1G count=$swap_size_gb
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
+    echo '/swapfile none swap defaults 0 0' >> /etc/fstab
+fi
 
 # Windows dual boot
 echo "Do you wish to enable windows finding in grub?"

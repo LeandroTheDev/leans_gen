@@ -15,8 +15,57 @@ if [[ "$response" == "n" || "$response" == "no" ]]; then
     exit 1
 fi
 
+# ---------- Firmware Selection ----------
+FIRMWARE_PACKAGES=""
+
+add_pkg() {
+    case " $FIRMWARE_PACKAGES " in
+        *" $1 "*) ;; # already added
+        *) FIRMWARE_PACKAGES="$FIRMWARE_PACKAGES $1" ;;
+    esac
+}
+
+while true; do
+    echo
+    echo "Select firmware to install:"
+    echo "1 - All firmware (full linux-firmware), recommended!"
+    echo "2 - Intel (WiFi, Bluetooth, iGPU, etc)"
+    echo "3 - NVIDIA GPUs"
+    echo "4 - AMD GPUs"
+    echo "5 - Network / Bluetooth vendors (Realtek, Atheros, Broadcom, MediaTek)"
+    echo "6 - Extra Firmwares / Sound Open Firmware"
+    echo "0 - Done selecting"
+    echo
+
+    read -p "Option: " opt
+
+    case "$opt" in
+        1) add_pkg "linux-firmware" ;;
+        2) add_pkg "linux-firmware-intel" ;;
+        3) add_pkg "linux-firmware-nvidia" ;;
+        4) 
+            add_pkg "linux-firmware-amdgpu"
+            add_pkg "linux-firmware-radeon"
+            ;;
+        5)
+            add_pkg "linux-firmware-realtek"
+            add_pkg "linux-firmware-atheros"
+            add_pkg "linux-firmware-broadcom"
+            add_pkg "linux-firmware-mediatek"
+            ;;
+        6)
+            add_pkg "sof-firmware" ;;
+        0) break ;;
+        *) echo "Invalid option" ;;
+    esac
+done
+
+echo
+echo "Selected firmware packages:$FIRMWARE_PACKAGES"
+echo
+
 # Installation Process
-pacstrap /mnt base-devel base linux linux-firmware vim
+pacstrap /mnt base base-devel linux $FIRMWARE_PACKAGES vim
 
 # Generating fstab for the Linux System
 genfstab -U /mnt >> /mnt/etc/fstab

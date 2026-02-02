@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 for tty in /dev/tty{1..6}
 do

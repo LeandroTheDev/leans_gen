@@ -5,7 +5,7 @@
 timedatectl set-ntp true
 pacman -Sy archlinux-keyring --noconfirm
 
-pacman -Sy git
+pacman -Sy git --noconfirm
 git clone https://github.com/LeandroTheDev/leans_gen
 cd ./leans_gen
 ./leansgen.sh

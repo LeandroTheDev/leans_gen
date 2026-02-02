@@ -3,11 +3,11 @@ echo "Installing OBS Studio..."
 username=$(whoami)
 cd "/home/$username"
 
-if command -v paru >/dev/null 2>&1; then
-    sudo paru -S obs-studio-browser
+if [ -x /usr/bin/paru ]; then
+    paru -Sy obs-studio-browser
 
-    rm -rf "/home/$username/Temporary/obs-install.sh"
-    #sudo rm -rf "/etc/skel/Temporary/obs-install.sh"
+    # rm -rf "/home/$username/Temporary/obs-install.sh"
+    # sudo rm -rf "/etc/skel/Temporary/obs-install.sh"
 
     clear
 else

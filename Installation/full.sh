@@ -263,7 +263,7 @@ while true; do
     echo "LeansGEN Goddies"
     echo "1 - Basic Desktop (Waterfox, Kwrite Gwenview, GIMP, Paru, Flameshot, Ark and Compress Tools, Plasma System Monitor, VLC, Qbittorrent)"
     echo "2 - Social (Vesktop - Custom Discord)"
-    echo "3 - Streaming (OBS Studio)"
+    echo "3 - Streaming (Kdenlive, OBS Studio)"
     echo "4 - Gaming (Steam, Mangohud, Goverlay, Gamemode)"
     echo "5 - Development (Flutter, .NET, Rust, VSCode, OpenSSH, Chromium, DBeaver)"
     echo "6 - Bluetooth Drivers"
@@ -281,6 +281,7 @@ while true; do
             su $username -c "/home/$username/Temporary/vesktop-install.sh"
             ;;
         3)
+            pacman -S kdenlive
             su $username -c "/home/$username/Temporary/obs-install.sh"
             ;;
         4)

@@ -40,7 +40,10 @@ while true; do
     read -p "Option: " opt
 
     case "$opt" in
-        1) add_pkg "linux-firmware" ;;
+        1) 
+            add_pkg "linux-firmware" 
+            break 
+            ;;
         2) add_pkg "linux-firmware-intel" ;;
         3) add_pkg "linux-firmware-nvidia" ;;
         4) 

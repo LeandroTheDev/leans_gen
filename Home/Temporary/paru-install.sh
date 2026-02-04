@@ -11,7 +11,8 @@ echo ""
 echo "How do you want to install Paru?"
 echo "1) Compile from source (recommended, always up-to-date)"
 echo "2) Use prebuilt binary (faster, good for slow computers, may be outdated)"
-read -p "Choose an option [1/2]: " choice
+echo "3) Ignore Installation"
+read -p "Choose an option [1/2/3]: " choice
 
 choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
 
@@ -27,9 +28,6 @@ elif [[ "$choice" == "1" || "$choice" == "compile" || -z "$choice" ]]; then
     git clone https://aur.archlinux.org/paru.git
     cd paru
     makepkg -sic --noconfirm
-else
-    echo "Invalid option. Exiting."
-    exit 1
 fi
 
 # Deleting temporary folder

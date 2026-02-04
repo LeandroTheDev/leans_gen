@@ -8,6 +8,7 @@ if [ -x /usr/bin/paru ]; then
     echo "How do you want to install Vesktop?"
     echo "1) Compile from source (recommended, always up-to-date)"
     echo "2) Use prebuilt binary (faster, good for slow computers, may be outdated)"
+    echo "3) Ignore Installation"
     read -p "Choose an option [1/2]: " choice
 
     choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
@@ -16,9 +17,6 @@ if [ -x /usr/bin/paru ]; then
         paru -Sy vesktop-bin --noconfirm
     elif [[ "$choice" == "1" || "$choice" == "compile" || -z "$choice" ]]; then
         paru -Sy vesktop --noconfirm
-    else
-        echo "Invalid option. Exiting."
-        exit 1
     fi
 
     # rm -rf "/home/$username/Temporary/vesktop-install.sh"

@@ -8,6 +8,7 @@ if [ -x /usr/bin/paru ]; then
     echo "How do you want to install Flutter?"
     echo "1) Compile from source (recommended, always up-to-date)"
     echo "2) Use prebuilt binary (faster, good for slow computers, may be outdated)"
+    echo "3) Ignore Installation"
     read -p "Choose an option [1/2]: " choice
 
     choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
@@ -15,10 +16,7 @@ if [ -x /usr/bin/paru ]; then
     if [[ "$choice" == "2" || "$choice" == "binary" ]]; then
         paru -Sy flutter-bin
     elif [[ "$choice" == "1" || "$choice" == "compile" || -z "$choice" ]]; then
-        paru -Sy flutter
-    else
-        echo "Invalid option. Exiting."
-        exit 1
+        paru -Sy flutter    
     fi
 
     # rm -rf "/home/$username/Temporary/flutter-install.sh"

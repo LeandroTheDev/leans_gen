@@ -7,22 +7,19 @@ systemctl --user enable wireplumber.service pipewire.service pipewire-pulse.serv
 # Places folder creation
 ln -s /home/$username/.config /home/$username/System/Places/Config
 ln -s /home/$username/.local/share /home/$username/System/Places/Share
-if command -v ssh > /dev/null 2>&1; then
+if [ -x /usr/bin/ssh ]; then
     ln -s /home/$username/.ssh/ /home/$username/System/SSH
 fi
-if command -v steam > /dev/null 2>&1; then
-    mkdir -p /home/$username/.steam/
-    ln -s /home/$username/.steam/ /home/$username/System/Places/Steam
+if [ -x /usr/bin/steam ]; then
+    mkdir -p /home/$username/.local/share/Steam/
+    ln -s /home/$username/.local/share/Steam/ /home/$username/System/Places/Steam
 fi
 
 # Create public folder
 mkdir -p /home/$username/Public
-sudo chmod 0777 -R /home/$username/Public
-sudo mkdir -p /Public/$username
-ln -s /home/$username/Public/ /Public/$username
+ln -s /public /home/$username/Public/
 
-# This script will auto delete after executing
-rm -rf $HOME/Temporary/first-load.sh # Deleting the script
+# Remove from .bashrc
 sed -i '\#$HOME/Temporary/first-load.sh#d' "$HOME/.bashrc" # Removing from .bashrc if exist
 
 # Remove temporary folder

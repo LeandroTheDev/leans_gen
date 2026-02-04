@@ -60,6 +60,8 @@ chmod +x /etc/skel/Temporary/*
 
 # After template installation, lets copy the root template
 cp -r /etc/skel/.root/. /
+# Change permissions for /public
+chmod 3777 /public
 # Remove the temporary .root folder
 rm -rf /etc/skel/.root
 ### ENDREGION
@@ -241,7 +243,7 @@ while true; do
             ;;
         4)
             # Instal virtual box dependencies
-            pacman -S virtualbox-guest-utils --noconfirm
+            pacman -S virtualbox-guest-utils lib32-vulkan-virtio vulkan-virtio --noconfirm
             systemctl enable vboxservice.service
 
             # Add user to the virtual machine group
@@ -311,7 +313,7 @@ done
 ### ENDREGION
 
 # Numlock on boot
-chmod +x /usr/local/bin/numlock
+chmod +x /usr/local/bin/numlock.sh
 systemctl enable numlock
 
 echo "Do you wish to auto mount any external device on starting the system?"

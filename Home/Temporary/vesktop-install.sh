@@ -3,17 +3,34 @@ echo "Installing Vesktop..."
 username=$(whoami)
 cd "/home/$username"
 
-mkdir -p Temp
-cd Temp
-git clone https://aur.archlinux.org/vesktop-bin.git
-cd vesktop-bin
-makepkg -sic --noconfirm
+if [ -x /usr/bin/paru ]; then
+    echo ""
+    echo "How do you want to install Vesktop?"
+    echo "1) Compile from source (recommended, always up-to-date)"
+    echo "2) Use prebuilt binary (faster, good for slow computers, may be outdated)"
+    read -p "Choose an option [1/2]: " choice
 
-# Deleting temporary folder
-rm -rf "/home/$username/Temp"
+    choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
 
-# Deleting the script
-#rm -rf "/home/$username/Temporary/vesktop-install.sh"
-#sudo rm -rf "/etc/skel/Temporary/vesktop-install.sh"
+    if [[ "$choice" == "2" || "$choice" == "binary" ]]; then
+        paru -Sy vesktop-bin --noconfirm
+    elif [[ "$choice" == "1" || "$choice" == "compile" || -z "$choice" ]]; then
+        paru -Sy vesktop --noconfirm
+    else
+        echo "Invalid option. Exiting."
+        exit 1
+    fi
 
-clear
+    # rm -rf "/home/$username/Temporary/vesktop-install.sh"
+    # sudo rm -rf "/etc/skel/Temporary/vesktop-install.sh"
+
+    clear
+else
+    echo "paru is required to install Vesktop."
+    read -p "Install it? [Y/n]" response
+    response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+    if [[ -z "$response" || "$response" == "y" || "$response" == "yes" ]]; then
+        /home/$username/Temporary/paru-install.sh
+        /home/$username/Temporary/vesktop-install.sh
+    fi
+fi

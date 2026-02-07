@@ -1,0 +1,7 @@
+[Common]
+OutlineIntensity=OutlineOff
+ShadowColor=0,0,68
+ShadowSize=ShadowVeryLarge
+
+[Windeco]
+DrawBackgroundGradient=true

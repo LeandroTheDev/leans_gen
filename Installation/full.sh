@@ -262,8 +262,8 @@ done
 
 ### REGION: Personal OS for LeansGEN
 while true; do
-    echo "LeansGEN Goddies"
-    echo "1 - Basic Desktop (Waterfox, Kwrite Gwenview, GIMP, Paru, Flameshot, Ark and Compress Tools, Plasma System Monitor, VLC, Qbittorrent)"
+    echo "LeansGEN Goodies"
+    echo "1 - Basic Desktop (Browser of your choice, KCalc, Kwrite Gwenview, GIMP, Paru, Flameshot, Ark and Compress Tools, Plasma System Monitor, VLC, Qbittorrent)"
     echo "2 - Social (Vesktop - Custom Discord)"
     echo "3 - Streaming (Kdenlive, OBS Studio)"
     echo "4 - Gaming (Steam, Mangohud, Goverlay, Gamemode)"
@@ -274,10 +274,10 @@ while true; do
     
     case $choice in
         1)
-            pacman -S kwrite gwenview gimp ark unzip zip unrar p7zip flameshot plasma-systemmonitor vlc qbittorrent
+            pacman -S kcalc kwrite gwenview gimp ark unzip zip unrar p7zip flameshot plasma-systemmonitor vlc qbittorrent
 
             su $username -c "/home/$username/Temporary/paru-install.sh"
-            su $username -c "/home/$username/Temporary/waterfox-install.sh"
+            su $username -c "/home/$username/Temporary/browser-install.sh"
             ;;
         2)
             su $username -c "/home/$username/Temporary/vesktop-install.sh"

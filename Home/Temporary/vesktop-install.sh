@@ -15,8 +15,13 @@ if [ -x /usr/bin/paru ]; then
 
     if [[ "$choice" == "2" || "$choice" == "binary" ]]; then
         paru -Sy vesktop-bin --noconfirm
+        paru -S arrpc-bin --noconfirm
     elif [[ "$choice" == "1" || "$choice" == "compile" || -z "$choice" ]]; then
         paru -Sy vesktop --noconfirm
+        paru -S arrpc --noconfirm
+    else
+        echo "Invalid option. Exiting."
+        exit 1
     fi
 
     # rm -rf "/home/$username/Temporary/vesktop-install.sh"

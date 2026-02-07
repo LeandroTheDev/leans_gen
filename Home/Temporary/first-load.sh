@@ -19,6 +19,28 @@ fi
 mkdir -p /home/$username/Public
 ln -s /public /home/$username/Public/
 
+# REGION LEANS CONFIGURATIONS UPDATE
+TARGETS=("$HOME/.config" "$HOME/.local")
+
+echo "Replacing @USERNAME@ with: $username"
+echo
+
+for dir in "${TARGETS[@]}"; do
+  [ -d "$dir" ] || continue
+
+  echo "Scanning $dir ..."
+
+  # Find files containing the token, only text files
+  grep -rlI --null '@USERNAME@' "$dir" | while IFS= read -r -d '' file; do
+    echo "  -> Fixing: $file"
+    sed -i "s/@USERNAME@/$username/g" "$file"
+  done
+done
+
+echo
+echo "Done."
+# ENDREGION
+
 # Remove from .bashrc
 sed -i '\#$HOME/Temporary/first-load.sh#d' "$HOME/.bashrc" # Removing from .bashrc if exist
 

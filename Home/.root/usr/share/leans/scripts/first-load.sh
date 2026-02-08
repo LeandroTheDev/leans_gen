@@ -41,8 +41,4 @@ echo
 echo "Done."
 # ENDREGION
 
-# Remove from .bashrc
-sed -i '\#$HOME/Temporary/first-load.sh#d' "$HOME/.bashrc" # Removing from .bashrc if exist
-
-# Remove temporary folder
-rm -rf /home/$username/Temporary
+rm -f /home/$username/.config/autostart/first-load.sh.desktop

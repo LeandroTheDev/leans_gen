@@ -13,7 +13,7 @@ read -p "Option: " option
 
 case "$option" in
   1)
-    pacman -S firefox
+    sudo pacman -S firefox
     ;;
   2)
     if [ -x /usr/bin/paru ]; then
@@ -49,8 +49,7 @@ case "$option" in
     fi
     ;;
   3)
-    echo "You chose Chromium"
-    pacman -S chromium
+    sudo pacman -S chromium
     ;;
   4)
     ;;

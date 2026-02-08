@@ -185,7 +185,7 @@ clear
 
 ### REGION: Personal OS for LeansGEN
 # Installing the OS
-pacman -S plasma-desktop sddm konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm
+pacman -S plasma-desktop sddm konsole dolphin kscreen kde-gtk-config pipewire pipewire-jack pipewire-pulse pipewire-alsa wireplumber plasma-pa breeze-gtk bluedevil plasma-nm kwalletmanager kwallet-pam
 systemctl enable sddm
 
 clear

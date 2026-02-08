@@ -236,7 +236,7 @@ while true; do
             pacman -S vulkan-intel lib32-vulkan-intel linux-headers --noconfirm
             ;;
         2)
-            pacman -S nvidia nvidia-utils lib32-nvidia-utils libva-nvidia-driver linux-headers --noconfirm
+            pacman -S nvidia-open nvidia-utils lib32-nvidia-utils libva-nvidia-driver linux-headers --noconfirm
             ;;
         3)
             pacman -S vulkan-radeon lib32-vulkan-radeon linux-headers --noconfirm
@@ -290,7 +290,7 @@ while true; do
             pacman -S steam mangohud goverlay gamemode
             ;;
         5)
-            pacman -S vscode dotnet-sdk dotnet-runtime chromium rustup openssh dbeaver
+            pacman -S code dotnet-sdk dotnet-runtime chromium rustup openssh dbeaver
             su $username -c "rustup default stable"
             su $username -c "/home/$username/Temporary/flutter-install.sh"
             ;;
